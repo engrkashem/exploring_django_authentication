@@ -1,10 +1,27 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, profileChange
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 
 # Create your views here.
+
+
+def changeUserProfile(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = profileChange(request.POST, instance=request.user)
+            if form.is_valid():
+                messages.success(request, 'Account is updated successfully')
+                # messages.warning(request, 'Account is created successfully')
+                # messages.info(request, 'Account is created successfully')
+                form.save(commit=True)
+                return redirect('profile')
+        else:
+            form = profileChange()
+        return render(request, './profile.html', {'form': form})
+    else:
+        return redirect('signup')
 
 
 def setPass(request):
@@ -66,8 +83,19 @@ def signin(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        return render(request, './profile.html', {'user': request.user})
-    return redirect('login')
+        if request.method == 'POST':
+            form = profileChange(request.POST, instance=request.user)
+            if form.is_valid():
+                messages.success(request, 'Account is updated successfully')
+                # messages.warning(request, 'Account is created successfully')
+                # messages.info(request, 'Account is created successfully')
+                form.save(commit=True)
+                return redirect('profile')
+        else:
+            form = profileChange(instance=request.user)
+        return render(request, './profile.html', {'form': form})
+    else:
+        return redirect('signup')
 
 
 def home(request):

@@ -1,9 +1,32 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+
     <h1 class="text-center mt-5">Welcome to {{user.username}} Profile</h1>
     <p class=" text-center">
-        <a href="{% url "changePass" %}" class="ms-1 text-primary fs-5 text-decoration-none">Change Password</a>
-        <a href="{% url "setPass" %}" class="ms-1 text-primary fs-5 text-decoration-none">Set Password</a>
+        <a href="{% url "changePass" %}" class="ms-1 fs-5 text-decoration-none btn btn-info">Change Password</a>
+        <a href="{% url "setPass" %}" class="ms-1 fs-5 text-decoration-none btn btn-info">Set Password</a>
     </p>
+
+    {% if messages %}
+    {% for m in messages %}
+        <p class="text-success">{{m}}</p>
+    {% endfor %}
+    {% endif %}
+    
+
+    <form method='post' class="w-75 mx-auto mt-5" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            {% for e in form.non_field_errors %}
+            <p class="text-danger text-center">{{e}}</p>
+            {% endfor %}
+        {% endif %}
+        <!-- {{form |crispy}} -->
+            {% for field in form%}
+                {{field.label_tag}}{{field}}{{field.errors | striptags}}
+            {% endfor %}
+        <input type='submit' value='Change User Profile' class='btn btn-info mt-2' />
+    </form>
 {% endblock content %}

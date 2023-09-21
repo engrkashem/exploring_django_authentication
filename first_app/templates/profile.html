@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center mt-5">Welcome to {{user.username}} Profile</h1>
+    <p class=" text-center">
+        <a href="{% url "changePass" %}" class="ms-1 text-primary fs-5 text-decoration-none">Change Password</a>
+        <a href="{% url "setPass" %}" class="ms-1 text-primary fs-5 text-decoration-none">Set Password</a>
+    </p>
+{% endblock content %}

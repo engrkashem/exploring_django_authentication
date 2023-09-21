@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    {% if messages %}
+        {% for m in messages %}
+            <p {% if m.tags %} class="{{m.tags}}" {% endif %}>{{m}}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method='post' class="w-75 mx-auto mt-5" novalidate>
+        <h1 class='text-center'>Sign Up</h1>
+        {% csrf_token %}
+        <!-- {{form |crispy}} -->
+            {% for field in form%}
+                {{field.label_tag}}{{field}}{{field.errors}}
+            {% endfor %}
+        <input type='submit' value='Submit' class='btn btn-primary mt-2' />
+        <small>Already have an account?</small><a href="{% url "login" %}" class="ms-1 text-promary fs-5 text-decoration-none">Login</a>
+    </form>
+
+{% endblock content %}
